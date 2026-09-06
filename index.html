@@ -28,11 +28,20 @@
   </main>
 
   <footer>
-    <button id="refresh-btn" type="button">↻ Actualizar</button>
+    <div class="footer-buttons">
+      <button id="refresh-btn" type="button">↻ Actualizar</button>
+      <button id="install-btn" type="button" hidden>📲 Instalar app</button>
+    </div>
     <p class="source">
       Datos: <a href="https://www.cofcadiz.es/farmacias-de-guardia/" target="_blank" rel="noopener">Colegio de Farmacéuticos de Cádiz</a>
     </p>
   </footer>
+
+  <dialog id="ios-install-dialog">
+    <p><strong>Instalar en iPhone/iPad</strong></p>
+    <p>Toca el icono Compartir <span aria-hidden="true">⬆️</span> en Safari y luego «Añadir a pantalla de inicio».</p>
+    <button id="ios-install-dialog-close" type="button">Entendido</button>
+  </dialog>
 
   <script src="script.js"></script>
 </body>

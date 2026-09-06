@@ -34,9 +34,22 @@
     return digits.replace(/(\d{3})(?=\d)/g, "$1 ").trim();
   }
 
-  function buildMapsUrl(coordStr) {
+  function buildMapsUrl(contacto) {
+    const addressParts = [
+      contacto.direccion,
+      [contacto.codigo_postal, contacto.municipio].filter(Boolean).join(" "),
+      contacto.provincia,
+      "España",
+    ].filter(Boolean);
+
+    if (addressParts.length) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        addressParts.join(", ")
+      )}`;
+    }
+
     try {
-      const [lat, lon] = JSON.parse(coordStr);
+      const [lat, lon] = JSON.parse(contacto.coordenadas);
       return `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
     } catch (e) {
       return null;
@@ -62,7 +75,7 @@
       .filter(Boolean)
       .join(", ");
     const phoneDigits = (contacto.telefono || "").replace(/\D/g, "");
-    const mapsUrl = buildMapsUrl(contacto.coordenadas);
+    const mapsUrl = buildMapsUrl(contacto);
 
     return `
       <article class="card">
@@ -172,4 +185,49 @@
   refreshBtn.addEventListener("click", load);
   document.addEventListener("DOMContentLoaded", load);
   if (document.readyState !== "loading") load();
+
+  // --- Install to home screen (Android + iOS) ---
+  const installBtn = document.getElementById("install-btn");
+  const iosDialog = document.getElementById("ios-install-dialog");
+  const iosDialogCloseBtn = document.getElementById("ios-install-dialog-close");
+
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  let deferredInstallPrompt = null;
+
+  function showInstallButton() {
+    if (!isStandalone) installBtn.hidden = false;
+  }
+
+  if (!isStandalone && isIos) {
+    showInstallButton();
+  }
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    showInstallButton();
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installBtn.hidden = true;
+    } else if (isIos) {
+      iosDialog.showModal();
+    }
+  });
+
+  if (iosDialogCloseBtn) {
+    iosDialogCloseBtn.addEventListener("click", () => iosDialog.close());
+  }
+
+  window.addEventListener("appinstalled", () => {
+    installBtn.hidden = true;
+  });
 })();
