@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farmacia de Guardia · Benalup-Casas Viejas</title>
+<meta name="description" content="Farmacia de guardia hoy en Benalup-Casas Viejas">
+<meta name="theme-color" content="#1f9d55">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <img class="topbar-icon" src="icon.svg" alt="">
+    <div>
+      <h1>Farmacia de Guardia</h1>
+      <p class="subtitle">Benalup-Casas Viejas</p>
+    </div>
+  </header>
+
+  <main id="content" aria-live="polite">
+    <div class="state" id="state-loading">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Buscando la farmacia de guardia de hoy…</p>
+    </div>
+  </main>
+
+  <footer>
+    <button id="refresh-btn" type="button">↻ Actualizar</button>
+    <p class="source">
+      Datos: <a href="https://www.cofcadiz.es/farmacias-de-guardia/" target="_blank" rel="noopener">Colegio de Farmacéuticos de Cádiz</a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
